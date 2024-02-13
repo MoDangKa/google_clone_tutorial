@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_clone_tutorial/colors.dart';
 
 class SearchHeader extends StatelessWidget {
@@ -34,6 +35,33 @@ class SearchHeader extends StatelessWidget {
             ),
             child: TextFormField(
               style: const TextStyle(fontSize: 16),
+              textAlignVertical: TextAlignVertical.center,
+              decoration: InputDecoration(
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 150),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/images/mic-icon.svg',
+                          height: 20,
+                          width: 20,
+                        ),
+                        const SizedBox(width: 20),
+                        const Icon(
+                          Icons.search,
+                          color: blueColor,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                focusedBorder: InputBorder.none,
+                enabledBorder: InputBorder.none,
+              ),
             ),
           )
         ],
