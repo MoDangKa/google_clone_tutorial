@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_clone_tutorial/colors.dart';
+import 'package:google_clone_tutorial/screens/search_screen.dart';
+import 'package:google_clone_tutorial/helper.dart';
 
 class Search extends StatelessWidget {
   const Search({super.key});
@@ -23,8 +25,19 @@ class Search extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          width: size.width > 768 ? size.width * 0.4 : size.width * 0.9,
+          // width: size.width > 768 ? size.width * 0.4 : size.width * 0.9,
+          width: 600,
           child: TextFormField(
+            onFieldSubmitted: (query) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SearchScreen(
+                    searchQuery: query,
+                    start: "0",
+                  ),
+                ),
+              );
+            },
             decoration: InputDecoration(
               border: const OutlineInputBorder(
                 borderSide: BorderSide(color: searchColor),

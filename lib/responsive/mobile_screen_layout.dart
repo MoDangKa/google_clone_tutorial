@@ -88,7 +88,7 @@ class MobileScreenLayout extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 5, right: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           children: [
             SizedBox(height: size.height * 0.25),
@@ -98,9 +98,9 @@ class MobileScreenLayout extends StatelessWidget {
                 children: [
                   Search(),
                   SizedBox(height: 20),
-                  SearchButtons(),
-                  SizedBox(height: 20),
-                  TranslationButtons(),
+                  // SearchButtons(),
+                  // SizedBox(height: 20),
+                  // TranslationButtons(),
                 ],
               ),
             ),

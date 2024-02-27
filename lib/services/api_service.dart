@@ -5,7 +5,7 @@ import 'package:google_clone_tutorial/config/api_keys.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  bool isDummyData = true;
+  bool isDummyData = false;
 
   Future<Map<String, dynamic>> fetchData(
       {required String queryTerm, String start = "0"}) async {

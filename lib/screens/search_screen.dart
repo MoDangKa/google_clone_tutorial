@@ -7,27 +7,57 @@ import 'package:google_clone_tutorial/widgets/search_result_component.dart';
 import 'package:google_clone_tutorial/widgets/search_tabs.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+  final String searchQuery;
+  final String start;
+  const SearchScreen({
+    super.key,
+    required this.searchQuery,
+    required this.start,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SearchHeader(),
-            const Padding(
-              padding: EdgeInsets.only(left: 150),
-              child: SearchTabs(),
-            ),
-            const Divider(
-              height: 0,
-              thickness: 0.5,
-            ),
-            FutureBuilder(
-                future: ApiService().fetchData(queryTerm: "Rivaan"),
+    final size = MediaQuery.of(context).size;
+    final double paddingLeft = size.width <= 768 ? 20 : 150;
+
+    void action(String common) {
+      final int s =
+          common == "prev" ? int.parse(start) - 10 : int.parse(start) + 10;
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => SearchScreen(
+            searchQuery: searchQuery,
+            start: (s).toString(),
+          ),
+        ),
+      );
+    }
+
+    return Title(
+      color: Colors.blue,
+      title: searchQuery,
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SearchHeader(),
+              Padding(
+                padding: EdgeInsets.only(left: paddingLeft),
+                child: const SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: SearchTabs(),
+                ),
+              ),
+              const Divider(
+                height: 0,
+                thickness: 0.5,
+              ),
+              FutureBuilder(
+                future: ApiService()
+                    .fetchData(queryTerm: searchQuery, start: start),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData) {
                     return Column(
@@ -35,7 +65,7 @@ class SearchScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(left: 150, top: 12),
+                          padding: EdgeInsets.only(left: paddingLeft, top: 12),
                           child: Text(
                             "About ${snapshot.data?['searchInformation']['formattedTotalResults']} results (${snapshot.data?['searchInformation']['formattedSearchTime']}) seconds",
                             style: const TextStyle(
@@ -49,8 +79,8 @@ class SearchScreen extends StatelessWidget {
                           shrinkWrap: true,
                           itemBuilder: (context, index) {
                             return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 150,
+                              padding: EdgeInsets.only(
+                                left: paddingLeft,
                                 top: 10,
                               ),
                               child: SearchResultComponent(
@@ -63,48 +93,50 @@ class SearchScreen extends StatelessWidget {
                               ),
                             );
                           },
-                        )
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              TextButton(
+                                onPressed: () => action('prev'),
+                                child: const Text(
+                                  '< Prev',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: blueColor,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 30),
+                              TextButton(
+                                onPressed: () => action('next'),
+                                child: const Text(
+                                  'Next >',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: blueColor,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        const SearchFooter()
                       ],
                     );
                   }
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
-                }),
-            SizedBox(
-              width: double.infinity,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      '< Prev',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: blueColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 30),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Next >',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: blueColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+                },
               ),
-            ),
-            const SizedBox(height: 30),
-            const SearchFooter()
-          ],
+            ],
+          ),
         ),
       ),
     );
